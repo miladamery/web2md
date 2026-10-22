@@ -1,0 +1,60 @@
+# web2md configuration.
+#
+# Copy to `web2md.toml` in the directory you run from — it is picked up
+# automatically — or pass it explicitly with `--config`.
+#
+# Everything here is optional, and anything given on the command line wins.
+# A typical use is to pin one site's shape once and then run `web2md <url>`
+# without retyping a dozen flags.
+
+output = "out"
+concurrency = 8
+delay_ms = 150          # minimum gap between requests to the same host
+timeout_secs = 30
+# user_agent = "my-team-rag-bot/1.0 (contact@example.com)"
+
+# --- Scope -----------------------------------------------------------------
+# `host`   — anywhere on the seed's host
+# `prefix` — the seed's host *and* directory. Use this on hosts that serve
+#            several projects side by side, e.g. pekko.apache.org/docs/pekko/.
+# `any`    — no restriction. Only sensible together with `include`.
+scope = "host"
+max_depth = 6
+
+# --- URL filtering ---------------------------------------------------------
+# Regexes. `include` is an allow-list (any match admits); `exclude` is a
+# deny-list (any match rejects). Both are additive on top of the CLI.
+#
+# `exclude_common` drops the near-duplicate trees that make doc sitemaps
+# enormous: `/api/`, `/javadoc/`, `-SNAPSHOT`, and non-HTML extensions.
+exclude_common = true
+include = []
+exclude = []
+
+# --- Output ----------------------------------------------------------------
+# `relative` — links point at the sibling `.md` file. Keeps the tree
+#              self-consistent, which is what a RAG ingest wants.
+# `absolute` — keep the original URL.
+# `keep`     — leave every link exactly as the HTML had it.
+link_style = "relative"
+front_matter = true
+keep_images = false     # images are diagrams and noise in a text corpus
+merge = false           # also write one concatenated <site>.md
+skip_existing = false   # set true to make re-runs cheap
+
+# --- Site profiles ---------------------------------------------------------
+# A profile says where the real content is on a site and what chrome to strip.
+# Built-ins cover MkDocs Material, Lightbend Paradox, Asciidoctor and Antora,
+# and are matched by host and by <meta name="generator">.
+#
+# Define your own for a site that isn't recognised. Profiles declared here are
+# tried before the built-ins, and reusing a built-in's `name` overrides it.
+#
+# [[site]]
+# name = "my-docs"
+# hosts = ["docs.example.com"]        # matched on exact host or any subdomain
+# generators = ["docusaurus"]         # substring match on <meta name="generator">
+# content_selectors = ["article.theme-doc-markdown", "main"]
+# title_selector = "h1"
+# prune_selectors = [".theme-doc-toc", ".pagination-nav", ".navbar"]
+# transform_dl_tabs = false           # true turns <dl><dt> into bold labels

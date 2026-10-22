@@ -1,0 +1,49 @@
+[package]
+name = "web2md"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.82"
+description = "Crawl documentation sites and emit one Markdown file per HTML page"
+license = "MIT OR Apache-2.0"
+
+[[bin]]
+name = "web2md"
+path = "src/main.rs"
+
+[lib]
+name = "web2md"
+path = "src/lib.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "fs", "sync", "time"] }
+# reqwest 0.13 renamed the TLS features: `rustls-tls` no longer exists, and
+# `default-tls` now resolves to `rustls`. Defaults give us rustls TLS + charset
+# (non-UTF-8 decoding) + http2 + system-proxy; we only add the decompression layers.
+reqwest = { version = "0.13", features = ["gzip", "brotli", "deflate"] }
+futures = "0.3"
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+scraper = "0.29"
+lol_html = "3"
+htmd = "0.5"
+regex = "1"
+quick-xml = "0.42"
+# Many sites publish only `sitemap.xml.gz`. reqwest's decompression does not
+# cover a .gz file served as an opaque attachment, so we gunzip it ourselves.
+flate2 = "1"
+texting_robots = "0.2"
+url = "2"
+percent-encoding = "2"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+indicatif = "0.18"
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

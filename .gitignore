@@ -1,0 +1,19 @@
+# Rust build artifacts
+/target/
+
+# Local run configuration — web2md picks this up automatically from the
+# working directory. Commit web2md.toml.example instead.
+/web2md.toml
+
+# Crawl output: the default `out`, the `out-<site>` convention from the README,
+# and the resumability state that lands under whichever output root is used.
+/out/
+/out-*/
+.web2md/
+
+# Editors / OS
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
